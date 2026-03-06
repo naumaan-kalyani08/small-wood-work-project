@@ -39,6 +39,9 @@ export default function NavBar() {
             <Link to="/manufacturing" className="text-gray-700 hover:text-amber-800 transition-colors">
               Manufacturing
             </Link>
+            <Link to="/contact-us-form-responses" className="text-gray-700 hover:text-amber-800 transition-colors">
+              Forms
+            </Link>
             <button
               onClick={() => scrollToSection("contact")}
               className="text-gray-700 hover:text-amber-800 transition-colors"
