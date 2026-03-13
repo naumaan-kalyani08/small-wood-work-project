@@ -1,0 +1,47 @@
+.react-resizable {
+    position: relative;
+}
+
+.react-resizable-hide {
+    display: none;
+}
+
+.react-grid-handle {
+    background-color: #d3d3d3;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.ant-table thead > tr > th {
+    position: relative;
+    overflow: visible !important;
+}
+
+.react-resizable > .react-resizable-handle {
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    top: 0;
+    right: -5px;
+    cursor: col-resize;
+    display: block;
+    background-color: transparent;
+}
+
+.react-resizable > .react-resizable-handle::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    right: 4px;
+    top: 0;
+    background-color: #d3d3d3;
+}
+
+.react-resizable > .react-resizable-handle:hover::after {
+    background-color: #1890ff;
+}
