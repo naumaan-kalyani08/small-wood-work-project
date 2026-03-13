@@ -2,18 +2,38 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Contact() {
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
   const [formData, setFormData] = useState({
-    name: '',
+    first_name: '',
+    last_name: '',
+    full_name: "",
     email: '',
-    phone: '',
-    company: '',
+    phone_number: '',
     message: '',
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormData({
+      ...formData,
+      full_name: `${formData.first_name} ${formData.last_name}`
+    });
+    try {
+      const repsonse = await fetch(`${apiUrl}contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!repsonse.ok) {
+        throw new Error(`Failed to submit form: ${repsonse.status} ${repsonse.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
     alert('Thank you for your inquiry! We will get back to you soon.');
-    setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+    setFormData({ first_name: '', last_name: '', full_name: '', email: '', phone_number: '', message: '' });
   };
 
   const handleChange = (e) => {
@@ -41,8 +61,8 @@ export default function Contact() {
               <Phone className="text-white" size={24} />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Phone</h3>
-            <p className="text-gray-700">+1 (555) 123-4567</p>
-            <p className="text-gray-700">+1 (555) 987-6543</p>
+            <p className="text-gray-700">+91 982 590 2743</p>
+            <p className="text-gray-700">+91 738 361 5985</p>
             <p className="text-sm text-gray-600 mt-2">Mon-Fri: 9AM - 6PM</p>
           </div>
 
@@ -74,20 +94,51 @@ export default function Contact() {
           <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Full Name *
+                <label htmlFor="first_name" className="block text-sm font-semibold text-gray-700 mb-2">
+                  first Name *
                 </label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  id="first_name"
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
                   placeholder="John Doe"
                 />
               </div>
+              <div>
+                <label htmlFor="last_name" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
+                  placeholder="Doe"
+                />
+              </div>
+              <div>
+                <label htmlFor="full_name" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  id="full_name"
+                  name="full_name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
+                  placeholder="John Doe"
+                />
+              </div>
+
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
                   Email Address *
@@ -107,14 +158,14 @@ export default function Contact() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="phone_number" className="block text-sm font-semibold text-gray-700 mb-2">
                   Phone Number
                 </label>
                 <input
                   type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
+                  id="phone_number"
+                  name="phone_number"
+                  value={formData.phone_number}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
                   placeholder="+1 (555) 123-4567"
