@@ -1,4 +1,5 @@
 import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Link } from "react-router";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -60,28 +61,28 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2">
               <li>
-                <button
-                  onClick={() => scrollToSection("home")}
+                <Link
+                  to="/"
                   className="text-gray-300 hover:text-amber-400 transition-colors"
                 >
                   Home
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection("products")}
+                <Link
+                  to="/products"
                   className="text-gray-300 hover:text-amber-400 transition-colors"
                 >
                   Products
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection("manufacturing")}
+                <Link
+                  to="/manufacturing"
                   className="text-gray-300 hover:text-amber-400 transition-colors"
                 >
                   Manufacturing
-                </button>
+                </Link>
               </li>
               <li>
                 <button
