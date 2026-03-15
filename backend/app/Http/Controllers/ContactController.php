@@ -13,7 +13,10 @@ class ContactController extends Controller
         Log::info('function triggered');
         // Add your contact form submission logic here
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'full_name' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
             'email' => 'required|email',
             'message' => 'required|string',
         ]);
