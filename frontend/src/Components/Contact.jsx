@@ -1,8 +1,10 @@
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
+import { message } from 'antd';
 
 export default function Contact() {
   const apiUrl = import.meta.env.VITE_APP_API_URL;
+  const [isSubmitting, setisSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -11,9 +13,10 @@ export default function Contact() {
     phone_number: '',
     message: '',
   });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return; // Prevent multiple submissions
+    setisSubmitting(true);
     setFormData({
       ...formData,
       full_name: `${formData.first_name} ${formData.last_name}`
@@ -31,18 +34,45 @@ export default function Contact() {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
+      message.error('There was an error submitting your inquiry. Please try again later.');
+      return;
+    } finally {
+      setisSubmitting(false);
     }
-    alert('Thank you for your inquiry! We will get back to you soon.');
+    message.success('Thank you for your inquiry! We will get back to you soon.');
     setFormData({ first_name: '', last_name: '', full_name: '', email: '', phone_number: '', message: '' });
   };
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => {
+  //     const updatedData = {
+  //       ...prevData,
+  //       [name]: value,
+  //     }
+  //   })
+  //   if (name === 'first_name' || name === 'last_name') {
+  //     updatedData.full_name = `${updatedData.first_name} ${updatedData.last_name}`.trim();
+  //   }
+  //   return updatedData;
+  // };
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    const { name, value } = e.target;
+
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: value,
+      };
+
+      if (name === "first_name" || name === "last_name") {
+        updatedData.full_name =
+          `${updatedData.first_name} ${updatedData.last_name}`.trim();
+      }
+
+      return updatedData;
     });
   };
-
   return (
     <section id="contact" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -205,7 +235,8 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="w-full bg-amber-800 text-white py-4 rounded-lg hover:bg-amber-900 transition-all transform hover:scale-105 font-semibold text-lg flex items-center justify-center shadow-lg"
+              disabled={isSubmitting}
+              className={`w-full bg-amber-800 text-white py-4 rounded-lg hover:bg-amber-900 transition-all transform hover:scale-105 font-semibold text-lg flex items-center justify-center shadow-lg ${isSubmitting ? 'cursor-not-allowed opacity-50' : ''}`}
             >
               Send Message
               <Send className="ml-2" size={20} />
