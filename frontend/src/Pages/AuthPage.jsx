@@ -44,7 +44,7 @@ const AuthPage = () => {
 
                     {/* RIGHT (Signup) */}
                     <div className="card card-right bg-white p-4 rounded-lg shadow-lg">
-                        <h2>Sign Up</h2>
+                        <h2 className='text-2xl font-bold mb-4'>Sign Up</h2>
 
                         <button>Sign Up</button>
                         <button onClick={() => flipCard('login')}>Back</button>
@@ -52,7 +52,7 @@ const AuthPage = () => {
 
                     {/* LEFT (Forgot) */}
                     <div className="card card-left bg-white p-4 rounded-lg shadow-lg">
-                        <h2>Forgot Password</h2>
+                        <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
 
                         <button>Reset</button>
                         <button onClick={() => flipCard('login')}>Back</button>
