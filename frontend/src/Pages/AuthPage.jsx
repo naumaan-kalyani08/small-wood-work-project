@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Transition from '../Components/Transition'
+import { ReusableInputField } from '../Components/ReusableComponents';
 
 const AuthPage = () => {
     const apiUrl = import.meta.env.VITE_APP_API_URL;
@@ -35,7 +36,8 @@ const AuthPage = () => {
                     {/* FRONT (Login) */}
                     <div className="card card-front bg-white p-4 rounded-lg shadow-lg">
                         <h2 className='text-2xl font-bold mb-4'>Login</h2>
-
+                        <ReusableInputField label="Email" placeholder="Enter your email" />
+                        <ReusableInputField label="Password" placeholder="Enter your password" type="password" />
                         <button onClick={AuthUser}>Login</button>
 
                         <span onClick={() => flipCard('signup')}>Sign Up</span>
@@ -52,8 +54,10 @@ const AuthPage = () => {
 
                     {/* LEFT (Forgot) */}
                     <div className="card card-left bg-white p-4 rounded-lg shadow-lg">
-                        <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
-
+                        {view === 'signup' ?
+                            <h2 className='text-2xl font-bold mb-4'>Sign Up</h2>
+                            : <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
+                        }
                         <button>Reset</button>
                         <button onClick={() => flipCard('login')}>Back</button>
                     </div>
