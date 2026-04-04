@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Transition from '../Components/Transition'
 import { ReusableTableStructure } from '../Components/ReusableComponents'
 import { ContactUscolumns, DummyData } from '../Json/fromResponsesColumns'
+import { Skeleton } from 'antd'
 
 const ContactUsFormResponses = () => {
     const [FormData, setFormData] = useState([])
@@ -31,7 +32,9 @@ const ContactUsFormResponses = () => {
 
             const data = await response.json()
             setFormData(data)
-            console.log('Successfully fetched form data:', data)
+            setTimeout(() => {
+                setLoading(false)
+            }, 3000);
         } catch (error) {
             console.error('Error fetching form data:', error)
             setError(error.message)
@@ -44,11 +47,11 @@ const ContactUsFormResponses = () => {
         fetchFormData()
     }, [])
 
-    if (loading) return <div className='bg-white my-2 p-4 rounded-lg shadow-md container mx-auto'>Loading...</div>
+    if (loading) return <div className='bg-white my-2 p-4 rounded-lg shadow-md container mx-auto'><Skeleton active paragraph={{ rows: 6 }} /></div>
     if (error) return <div className='bg-red-100 my-2 p-4 rounded-lg shadow-md container mx-auto text-red-700'>Error: {error}</div>
 
     return (
-        <div className='bg-white my-2 p-4 rounded-lg shadow-md container mx-auto'>
+        <div className='bg-white min-height-screen my-2 p-4 rounded-lg shadow-md container mx-auto'>
             <h1>Contact Form Responses</h1>
 
             <ReusableTableStructure dataSource={FormData.length > 0 ? FormData : DummyData} columns={ContactUscolumns} rowKey="key" />
