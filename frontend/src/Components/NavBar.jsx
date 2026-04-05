@@ -48,6 +48,9 @@ export default function NavBar() {
             >
               Contact
             </button>
+            <Link to="/login" className="text-gray-700 hover:text-amber-800 transition-colors">
+              Login
+            </Link>
           </div>
 
           <div className="md:hidden">
