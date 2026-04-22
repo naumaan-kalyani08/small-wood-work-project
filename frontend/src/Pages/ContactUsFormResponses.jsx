@@ -3,6 +3,7 @@ import Transition from '../Components/Transition'
 import { ReusableTableStructure } from '../Components/ReusableComponents'
 import { ContactUscolumns, DummyData } from '../Json/fromResponsesColumns'
 import { Skeleton } from 'antd'
+import { GetCommonFunction } from '../CommonUtilities/CommonFunctions'
 
 const ContactUsFormResponses = () => {
     const [FormData, setFormData] = useState([])
@@ -10,40 +11,43 @@ const ContactUsFormResponses = () => {
     const [error, setError] = useState(null)
     const apiUrl = import.meta.env.VITE_APP_API_URL
 
-    const fetchFormData = async () => {
-        try {
-            setLoading(true)
-            setError(null)
-            const endpoint = `${apiUrl}contact-submissions`
-            console.log('Fetching from:', endpoint)
-
-            const response = await fetch(endpoint, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include', // Include cookies if needed
-            })
-
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status} ${response.statusText}`)
-            }
-
-            const data = await response.json()
-            setFormData(data)
-            setTimeout(() => {
-                setLoading(false)
-            }, 3000);
-        } catch (error) {
-            console.error('Error fetching form data:', error)
-            setError(error.message)
-        } finally {
-            setLoading(false)
-        }
-    }
-
     useEffect(() => {
+        const fetchFormData = async () => {
+            try {
+                setLoading(true)
+                setError(null)
+
+                // Call GetCommonFunction and capture the result
+                const result = await GetCommonFunction('contact-submissions', {}, false)
+
+                if (!result.success) {
+                    throw new Error(result.error)
+                }
+
+                // Extract the data - GetCommonFunction returns { data: { data, message } }
+                const responseData = result.data
+                let submissionsArray = Array.isArray(responseData) ? responseData : responseData.data
+
+                if (!Array.isArray(submissionsArray)) {
+                    throw new Error('Invalid response format - expected array or object with data property')
+                }
+
+                // Transform data to match table requirements
+                const transformedData = submissionsArray.map(item => ({
+                    ...item,
+                    key: item.id, // Add key property for Ant Design table
+                    full_name: `${item.first_name} ${item.last_name}` // Combine names
+                }))
+
+                setFormData(transformedData)
+                setLoading(false)
+            } catch (error) {
+                console.error('Error fetching form data:', error)
+                setError(error.message)
+                setLoading(false)
+            }
+        }
+
         fetchFormData()
     }, [])
 
