@@ -18,6 +18,13 @@ const AuthPage = () => {
             [name]: value
         }))
     }
+    const handleRegisterInputChange = (e) => {
+        const { name, value } = e.target;
+        setRegisterFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('submitted form data:', `email:${AuthForm.email}`, `password:${AuthForm.password}`);
@@ -32,11 +39,36 @@ const AuthPage = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
                 body: JSON.stringify(AuthForm)
             })
         } catch (error) {
             console.error(error)
+        }
+    }
+    const [registerFormData, setRegisterFormData] = useState({
+        first_name: '',
+        last_name: '',
+        email: '',
+        password: '',
+        dob: '',
+        phone_number: ''
+    })
+    const registerUser = async () => {
+        console.log('registering user with data:', registerFormData);
+        try {
+            const response = await fetch(`${apiUrl}register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(registerFormData)
+            })
+        } catch (error) {
+            console.error(error)
+            console.log('hitted api endppoint', `${apiUrl}register`)
         }
     }
     // useEffect(() => {
@@ -73,16 +105,18 @@ const AuthPage = () => {
                         {view === 'signup' ?
                             <>
                                 <h2 className='text-2xl font-bold mb-4'>Sign Up</h2>
-                                <ReusableInputField value={AuthForm.first_name} onchange={handleInputChange} label="First Name" placeholder="Enter your first name" name="first_name" />
-                                <ReusableInputField value={AuthForm.last_name} onchange={handleInputChange} label="Last Name" placeholder="Enter your last name" name="last_name" />
-                                <ReusableInputField value={AuthForm.email} onchange={handleInputChange} label="Email" placeholder="Enter your email" name="email" />
-                                <ReusableInputField value={AuthForm.password} onchange={handleInputChange} label="Password" placeholder="Enter your password" type="password" name="password" />
+                                <ReusableInputField value={registerFormData.first_name} onchange={handleRegisterInputChange} label="First Name" placeholder="Enter your first name" name="first_name" />
+                                <ReusableInputField value={registerFormData.last_name} onchange={handleRegisterInputChange} label="Last Name" placeholder="Enter your last name" name="last_name" />
+                                <ReusableInputField value={registerFormData.email} onchange={handleRegisterInputChange} label="Email" placeholder="Enter your email" name="email" />
+                                <ReusableInputField value={registerFormData.dob} onchange={handleRegisterInputChange} label="Date of Birth" placeholder="Enter your date of birth" type="date" name="dob" />
+                                <ReusableInputField value={registerFormData.phone_number} onchange={handleRegisterInputChange} label="Phone Number" placeholder="Enter your phone number" name="phone_number" />
+                                <ReusableInputField value={registerFormData.password} onchange={handleRegisterInputChange} label="Password" placeholder="Enter your password" type="password" name="password" />
 
                             </>
                             : <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
                         }
                         <button className="w-full px-4 py-1 shadow-md rounded border text-orange-800 font-semibold border-orange-800 cursor-pointer mb-2" onClick={() => flipCard('login')}>Back</button>
-                        <button className="w-full px-4 py-1.5 shadow-md rounded bg-orange-800 text-white cursor-pointer " >Reset</button>
+                        <button className="w-full px-4 py-1.5 shadow-md rounded bg-orange-800 text-white cursor-pointer " onClick={registerUser}>Register</button>
                     </div>
 
                 </div>
