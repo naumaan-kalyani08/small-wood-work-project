@@ -30,6 +30,9 @@ class ContactController extends Controller
     {
         // Retrieve all contact form submissions
         $submissions = ContactUs::all();
-        return response()->json($submissions);
+        return response()->json([
+            'data' => $submissions, 
+            'message' => 'Contact form submissions retrieved successfully'
+        ]);
     }
 }
