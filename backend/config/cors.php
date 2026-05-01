@@ -66,5 +66,5 @@ return [
      * Whether to allow cookies and authorization headers in cross-origin requests
      * Set to true if your API uses sessions or auth tokens
      */
-    'supports_credentials' => true,
+    'supports_credentials' => false,
 ];
