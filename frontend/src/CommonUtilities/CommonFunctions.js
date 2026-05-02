@@ -1,122 +1,83 @@
 import { message } from "antd";
-export const GetCommonFunction = async (apiEndpoint,parameters ={},showMessage = true) => {
-    try {
-        console.log('API Endpoint:', apiEndpoint);
-        const baseUrl = import.meta.env.VITE_APP_API_URL;
-        console.log('Base URL:', baseUrl);
-        // const apiUrl = `${baseUrl}${apiEndpoint}`
-        const apiUrl = new URL(`${baseUrl}${apiEndpoint}`);
-        Object.keys(parameters).forEach(key => {
-            apiUrl.searchParams.append(key, parameters[key])
-        });
-        const response = await fetch(apiUrl,{
-            method: 'GET',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-        });
-          const data = await response.json();
-        if (!response.ok) {
-            const errorMessage = data.message || 'An error occurred while fetching data.';
-            if (showMessage) message.error(errorMessage);
-            return {
-                success: false,
-                error: errorMessage
-            };                       
-        }
-        if (showMessage && data.message) {
-            message.success(data.message);
-        }
-        return{
-            success: true,
-            data 
-        }
-    } catch (error) {
-        console.log(error)
-        if(showMessage) message.error(errorMessage)
-        return{
-        success: false,
-        error: errorMessage
-        }   
- 
-    }
-}
 
-export const PostCommonFunction = async (apiEndpoint,body,showMessage = true) => {
-    try {
-        console.log('API Endpoint:', apiEndpoint);
-        const baseUrl = import.meta.env.VITE_APP_API_URL;
-        console.log('Base URL:', baseUrl);
-        const apiUrl = `${baseUrl}${apiEndpoint}`;
-        const response = await fetch(apiUrl,{
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-          const data = await response.json(); 
-        if (!response.ok) {
-            const errorMessage = data.message || 'An error occurred while fetching data.';
-            if (showMessage) message.error(errorMessage);
-            return {
-                success: false,
-                error: errorMessage
-            };                       
-        }
-        if (showMessage && data.message) {
-            message.success(data.message);
-        }
-        return{
-            success: true,
-            data 
-        }
-    } catch (error) {
-        console.log(error)
-        if(showMessage) message.error(errorMessage)
-        return{
-        success: false,
-        error: errorMessage
-        }  
-}}
+const baseUrl = import.meta.env.VITE_APP_API_URL;
 
-export const deleteCommonFUnction = async (apiEndpoint,parameters ={},showMessage = true) => {
+export const apiRequest = async ({
+    endpoint,
+    method = "GET",
+    params = {},
+    body = null,
+    headers = {},
+    showMessage = true,
+    timeout = 10000
+}) => {
     try {
-        console.log('API Endpoint:', apiEndpoint);
-        const baseUrl = import.meta.env.VITE_APP_API_URL;
-        console.log('Base URL:', baseUrl);
-        const apiUrl = new URL(`${baseUrl}${apiEndpoint}`);
-        Object.keys(parameters).forEach(key => {
-            apiUrl.searchParams.append(key, parameters[key])
-        });
-        const response = await fetch(apiUrl,{
-            method: 'DELETE',
-            headers:{
-                'Content-Type': 'application/json'
+        // Build URL
+        const url = new URL(`${baseUrl}${endpoint}`);
+
+        if (method === "GET" && params) {
+            Object.keys(params).forEach(key => {
+                if (params[key] !== undefined && params[key] !== null) {
+                    url.searchParams.append(key, params[key]);
+                }
+            });
+        }
+
+        // Timeout controller
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeout);
+
+        const response = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                ...headers,
             },
+            body: method !== "GET" && body ? JSON.stringify(body) : null,
+            signal: controller.signal
         });
-          const data = await response.json();
+
+        clearTimeout(timer);
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            data = null;
+        }
+
         if (!response.ok) {
-            const errorMessage = data.message || 'An error occurred while fetching data.';
+            const errorMessage = data?.message || `Error ${response.status}`;
             if (showMessage) message.error(errorMessage);
+
             return {
                 success: false,
-                error: errorMessage
-            };                       
+                error: errorMessage,
+                status: response.status
+            };
         }
-        if (showMessage && data.message) {
+
+        if (showMessage && data?.message) {
             message.success(data.message);
         }
-        return{
+
+        return {
             success: true,
-            data 
-        }
+            data,
+            status: response.status
+        };
+
     } catch (error) {
-        console.log(error)
-        if(showMessage) message.error(errorMessage)
-        return{
-        success: false,
-        error: errorMessage
-        }
+        const errorMessage =
+            error.name === "AbortError"
+                ? "Request timeout"
+                : error.message || "Something went wrong";
+
+        if (showMessage) message.error(errorMessage);
+
+        return {
+            success: false,
+            error: errorMessage
+        };
     }
-}
+};
