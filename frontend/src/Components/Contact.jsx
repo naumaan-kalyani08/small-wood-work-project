@@ -1,248 +1,164 @@
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
 import { message } from 'antd';
+import { apiRequest } from '../utils/apiRequest'; // use your enhanced API
 
 export default function Contact() {
-  const apiUrl = import.meta.env.VITE_APP_API_URL;
-  const [isSubmitting, setisSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const initialState = {
     first_name: '',
     last_name: '',
-    full_name: "",
+    full_name: '',
     email: '',
     phone_number: '',
+    company: '',
     message: '',
-  });
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (isSubmitting) return; // Prevent multiple submissions
-    setisSubmitting(true);
-    setFormData({
-      ...formData,
-      full_name: `${formData.first_name} ${formData.last_name}`
-    });
-    try {
-      const repsonse = await fetch(`${apiUrl}contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!repsonse.ok) {
-        throw new Error(`Failed to submit form: ${repsonse.status} ${repsonse.statusText}`);
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      message.error('There was an error submitting your inquiry. Please try again later.');
-      return;
-    } finally {
-      setisSubmitting(false);
-    }
-    message.success('Thank you for your inquiry! We will get back to you soon.');
-    setFormData({ first_name: '', last_name: '', full_name: '', email: '', phone_number: '', message: '' });
   };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => {
-  //     const updatedData = {
-  //       ...prevData,
-  //       [name]: value,
-  //     }
-  //   })
-  //   if (name === 'first_name' || name === 'last_name') {
-  //     updatedData.full_name = `${updatedData.first_name} ${updatedData.last_name}`.trim();
-  //   }
-  //   return updatedData;
-  // };
+  const [formData, setFormData] = useState(initialState);
+
+  // ✅ Validation
+  const validateForm = () => {
+    if (!formData.first_name || !formData.last_name) {
+      return "First and Last name are required";
+    }
+    if (!formData.email.includes('@')) {
+      return "Invalid email address";
+    }
+    if (!formData.message) {
+      return "Message cannot be empty";
+    }
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    const error = validateForm();
+    if (error) {
+      message.error(error);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // ✅ FIX: compute full_name locally (not relying on async state)
+    const payload = {
+      ...formData,
+      full_name: `${formData.first_name} ${formData.last_name}`.trim()
+    };
+
+    const res = await apiRequest({
+      endpoint: "/contact",
+      method: "POST",
+      body: payload
+    });
+
+    setIsSubmitting(false);
+
+    if (!res.success) return;
+
+    message.success("Thank you! We'll contact you soon 🚀");
+    setFormData(initialState);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => {
-      const updatedData = {
-        ...prevData,
-        [name]: value,
-      };
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: value };
 
       if (name === "first_name" || name === "last_name") {
-        updatedData.full_name =
-          `${updatedData.first_name} ${updatedData.last_name}`.trim();
+        updated.full_name =
+          `${updated.first_name} ${updated.last_name}`.trim();
       }
 
-      return updatedData;
+      return updated;
     });
   };
+
   return (
     <section id="contact" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* HEADER */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Get In Touch
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Ready to order or have questions? Contact us today for quotes, custom orders, or any inquiries
+            Ready to order or have questions? Contact us today.
           </p>
         </div>
 
+        {/* CONTACT INFO */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-            <div className="bg-amber-800 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Phone className="text-white" size={24} />
+          {[{
+            icon: <Phone />,
+            title: "Phone",
+            lines: ["+91 982 590 2743", "+91 738 361 5985"]
+          }, {
+            icon: <Mail />,
+            title: "Email",
+            lines: ["sales@woodfloatpro.com", "info@woodfloatpro.com"]
+          }, {
+            icon: <MapPin />,
+            title: "Location",
+            lines: ["Industrial Area, Ahmedabad"]
+          }].map((item, i) => (
+            <div key={i} className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
+              <div className="bg-amber-800 w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white">
+                {item.icon}
+              </div>
+              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+              {item.lines.map((line, idx) => (
+                <p key={idx} className="text-gray-700">{line}</p>
+              ))}
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Phone</h3>
-            <p className="text-gray-700">+91 982 590 2743</p>
-            <p className="text-gray-700">+91 738 361 5985</p>
-            <p className="text-sm text-gray-600 mt-2">Mon-Fri: 9AM - 6PM</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-            <div className="bg-amber-800 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Mail className="text-white" size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Email</h3>
-            <p className="text-gray-700">sales@woodfloatpro.com</p>
-            <p className="text-gray-700">info@woodfloatpro.com</p>
-            <p className="text-sm text-gray-600 mt-2">We reply within 24 hours</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-            <div className="bg-amber-800 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <MapPin className="text-white" size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Location</h3>
-            <p className="text-gray-700">123 Industrial Park Drive</p>
-            <p className="text-gray-700">Manufacturing District</p>
-            <p className="text-gray-700">City, State 12345</p>
-          </div>
+          ))}
         </div>
 
+        {/* FORM */}
         <div className="bg-gradient-to-br from-gray-50 to-amber-50 rounded-2xl shadow-xl p-8 md:p-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Send Us a Message
-          </h3>
           <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label htmlFor="first_name" className="block text-sm font-semibold text-gray-700 mb-2">
-                  first Name *
-                </label>
-                <input
-                  type="text"
-                  id="first_name"
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <label htmlFor="last_name" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Last Name *
-                </label>
-                <input
-                  type="text"
-                  id="last_name"
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
-                  placeholder="Doe"
-                />
-              </div>
-              <div>
-                <label htmlFor="full_name" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="full_name"
-                  name="full_name"
-                  value={formData.full_name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
-                  placeholder="John Doe"
-                />
-              </div>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address *
-                </label>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {["first_name", "last_name", "email", "company"].map((field) => (
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
+                  key={field}
+                  type="text"
+                  name={field}
+                  value={formData[field]}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
-                  placeholder="john@example.com"
+                  placeholder={field.replace('_', ' ').toUpperCase()}
+                  className="input"
                 />
-              </div>
+              ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label htmlFor="phone_number" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone_number"
-                  name="phone_number"
-                  value={formData.phone_number}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
-                  placeholder="+1 (555) 123-4567"
-                />
-              </div>
-              <div>
-                <label htmlFor="company" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all"
-                  placeholder="Your Company"
-                />
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
-                Message *
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={5}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-800 focus:border-transparent transition-all resize-none"
-                placeholder="Tell us about your requirements, quantity needed, or any questions you have..."
-              />
-            </div>
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              rows={5}
+              placeholder="Your message..."
+              className="w-full px-4 py-3 rounded-lg border"
+            />
 
             <button
-              type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-amber-800 text-white py-4 rounded-lg hover:bg-amber-900 transition-all transform hover:scale-105 font-semibold text-lg flex items-center justify-center shadow-lg ${isSubmitting ? 'cursor-not-allowed opacity-50' : ''}`}
+              className="btn-primary w-full mt-6 flex justify-center items-center"
             >
-              Send Message
+              {isSubmitting ? "Sending..." : "Send Message"}
               <Send className="ml-2" size={20} />
             </button>
+
           </form>
         </div>
+
       </div>
     </section>
   );
