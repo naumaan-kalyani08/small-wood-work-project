@@ -2,35 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContactUs;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
-abstract class Controller
+abstract class Controller extends BaseController
 {
-    public function submittedContactForm(Request $request)
-    {
-        $validated = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'description' => 'required|string',
-            'email' => 'required_without:phone|email',
-            'phone' => 'required_without:email',
-        ]);
-
-        $response = ContactUs::create($validated);
-
-        return response()->json([
-            'message' => 'Contact form submitted successfully',
-            'data' => $response
-        ], 201);
-    }
-    public function getContactFormSubmissions()
-    {
-        $submissions = ContactUs::all();
-
-        return response()->json([
-            'message' => 'Contact form submissions retrieved successfully',
-            'data' => $submissions
-        ], 200);
-    }
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 }
