@@ -18,19 +18,18 @@ class User extends Authenticatable
         'email',
         'password',
         'dob',
-        'number'
+        'number',
     ];
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'dob' => 'date',
-            'number' => 'integer',
-        ];
-    }
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'dob' => 'date',
+        'number' => 'integer',
+    ];
 }
