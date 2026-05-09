@@ -34,14 +34,22 @@ export const ContactUscolumns=[
 export const DummyData = [
   {
     key: 1,
-    name: "John",
-    age: 28,
-    address: "London"
+    id: 1,
+    first_name: "John",
+    last_name: "Doe",
+    full_name: "John Doe",
+    email: "john@example.com",
+    phone_number: "123-456-7890",
+    message: "Sample message"
   },
   {
     key: 2,
-    name: "Mike",
-    age: 32,
-    address: "New York"
+    id: 2,
+    first_name: "Mike",
+    last_name: "Smith",
+    full_name: "Mike Smith",
+    email: "mike@example.com",
+    phone_number: "098-765-4321",
+    message: "Another sample message"
   }
 ];
