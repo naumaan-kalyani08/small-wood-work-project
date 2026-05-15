@@ -1,9 +1,12 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated, logout, user } = useAuth();
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -48,9 +51,24 @@ export default function NavBar() {
             >
               Contact
             </button>
-            <Link to="/login" className="text-gray-700 hover:text-amber-800 transition-colors">
-              Login
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <span className="text-gray-700">Hi {user?.first_name || 'User'}</span>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate('/login');
+                  }}
+                  className="text-gray-700 hover:text-amber-800 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="text-gray-700 hover:text-amber-800 transition-colors">
+                Login
+              </Link>
+            )}
           </div>
 
           <div className="md:hidden">
@@ -88,6 +106,27 @@ export default function NavBar() {
             >
               Contact
             </button>
+            {isAuthenticated ? (
+              <>
+                <span className="block w-full text-left px-3 py-2 text-gray-700 rounded-md">Hi {user?.first_name || 'User'}</span>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate('/login');
+                  }}
+                  className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-800 rounded-md transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-800 rounded-md transition-colors"
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       )}
