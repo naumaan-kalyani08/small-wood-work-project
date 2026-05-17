@@ -1,6 +1,11 @@
 import { message } from "antd";
 
-const baseUrl = import.meta.env.VITE_APP_API_URL;
+const baseUrl = import.meta.env.VITE_APP_API_URL || 'http://localhost:8000/api';
+
+const normalizeEndpoint = (endpoint) => {
+    if (!endpoint) return '';
+    return endpoint.replace(/^\/+/, '');
+};
 
 export const apiRequest = async ({
     endpoint,
@@ -11,9 +16,10 @@ export const apiRequest = async ({
     showMessage = true,
     timeout = 10000
 }) => {
+    const normalizedEndpoint = normalizeEndpoint(endpoint);
     try {
         // Build URL
-        const url = new URL(`${baseUrl}${endpoint}`);
+        const url = new URL(`${baseUrl.replace(/\/$/, '')}/${normalizedEndpoint}`);
 
         if (method === "GET" && params) {
             Object.keys(params).forEach(key => {
@@ -80,4 +86,8 @@ export const apiRequest = async ({
             error: errorMessage
         };
     }
+};
+
+export const GetCommonFunction = async (endpoint, params = {}, showMessage = true) => {
+    return apiRequest({ endpoint, method: 'GET', params, showMessage });
 };
