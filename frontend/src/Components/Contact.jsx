@@ -1,7 +1,7 @@
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
 import { message } from 'antd';
-import { apiRequest } from '../utils/apiRequest'; // use your enhanced API
+import { apiRequest } from '../CommonUtilities/CommonFunctions';
 
 export default function Contact() {
 
