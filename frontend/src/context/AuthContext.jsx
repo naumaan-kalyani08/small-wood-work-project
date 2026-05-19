@@ -47,11 +47,24 @@ export const AuthProvider = ({ children }) => {
     return result;
   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('authUser');
+  const logout = async () => {
+    try {
+      if (token) {
+        await apiRequest({
+          endpoint: '/logout',
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          showMessage: false,
+        });
+      }
+    } catch (e) {
+      // ignore errors; still clear local state
+    } finally {
+      setToken(null);
+      setUser(null);
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('authUser');
+    }
   };
 
   const value = useMemo(
