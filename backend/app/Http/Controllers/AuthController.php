@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -51,5 +52,28 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
         ], 201);
+    }
+
+    /**
+     * Logout and revoke the current access token.
+     */
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json(['message' => 'Not authenticated'], 401);
+        }
+
+        $current = $user->currentAccessToken();
+        if ($current) {
+            $current->delete();
+        } else {
+            if (method_exists($user, 'tokens')) {
+                $user->tokens()->delete();
+            }
+        }
+
+        return response()->json(['message' => 'Logged out'], 200);
     }
 }
