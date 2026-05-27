@@ -1,43 +1,54 @@
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { useState } from 'react';
-import { message } from 'antd';
-import { apiRequest } from '../CommonUtilities/CommonFunctions';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  User,
+  Building2,
+  MessageSquare,
+} from "lucide-react";
+import { useState } from "react";
+import { message } from "antd";
+import { apiRequest } from "../CommonUtilities/CommonFunctions";
 
 export default function Contact() {
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialState = {
-    first_name: '',
-    last_name: '',
-    full_name: '',
-    email: '',
-    phone_number: '',
-    company: '',
-    message: '',
+    first_name: "",
+    last_name: "",
+    full_name: "",
+    email: "",
+    phone_number: "",
+    company: "",
+    message: "",
   };
 
   const [formData, setFormData] = useState(initialState);
 
-  // ✅ Validation
   const validateForm = () => {
     if (!formData.first_name || !formData.last_name) {
       return "First and Last name are required";
     }
-    if (!formData.email.includes('@')) {
+
+    if (!formData.email.includes("@")) {
       return "Invalid email address";
     }
+
     if (!formData.message) {
       return "Message cannot be empty";
     }
+
     return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (isSubmitting) return;
 
     const error = validateForm();
+
     if (error) {
       message.error(error);
       return;
@@ -45,16 +56,15 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    // ✅ FIX: compute full_name locally (not relying on async state)
     const payload = {
       ...formData,
-      full_name: `${formData.first_name} ${formData.last_name}`.trim()
+      full_name: `${formData.first_name} ${formData.last_name}`.trim(),
     };
 
     const res = await apiRequest({
       endpoint: "/contact",
       method: "POST",
-      body: payload
+      body: payload,
     });
 
     setIsSubmitting(false);
@@ -62,6 +72,7 @@ export default function Contact() {
     if (!res.success) return;
 
     message.success("Thank you! We'll contact you soon 🚀");
+
     setFormData(initialState);
   };
 
@@ -80,85 +91,197 @@ export default function Contact() {
     });
   };
 
-  return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  const contactInfo = [
+    {
+      icon: <Phone size={22} />,
+      title: "Phone",
+      lines: ["+91 982 590 2743", "+91 738 361 5985"],
+    },
+    {
+      icon: <Mail size={22} />,
+      title: "Email",
+      lines: ["sales@woodfloatpro.com", "info@woodfloatpro.com"],
+    },
+    {
+      icon: <MapPin size={22} />,
+      title: "Location",
+      lines: ["Industrial Area, Ahmedabad"],
+    },
+  ];
 
-        {/* HEADER */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Get In Touch
+  const inputClass =
+    "w-full rounded-xl border border-gray-200 bg-white/70 backdrop-blur-sm px-12 py-4 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-300 focus:border-amber-700 focus:ring-4 focus:ring-amber-100 shadow-sm";
+
+  return (
+    <section
+      id="contact"
+      className="relative overflow-hidden bg-gradient-to-b from-white via-amber-50/40 to-white py-24"
+    >
+      {/* Background Blur */}
+      <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mx-auto mb-20 max-w-3xl text-center">
+          <span className="mb-4 inline-block rounded-full bg-amber-100 px-4 py-1 text-sm font-semibold text-amber-800">
+            CONTACT US
+          </span>
+
+          <h2 className="mb-6 text-4xl font-black tracking-tight text-gray-900 md:text-5xl">
+            Let’s Build Something Great Together
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Ready to order or have questions? Contact us today.
+
+          <p className="text-lg leading-relaxed text-gray-600">
+            Have a project in mind or need product information? Our team is
+            ready to help you with the best solutions.
           </p>
         </div>
 
-        {/* CONTACT INFO */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {[{
-            icon: <Phone />,
-            title: "Phone",
-            lines: ["+91 982 590 2743", "+91 738 361 5985"]
-          }, {
-            icon: <Mail />,
-            title: "Email",
-            lines: ["sales@woodfloatpro.com", "info@woodfloatpro.com"]
-          }, {
-            icon: <MapPin />,
-            title: "Location",
-            lines: ["Industrial Area, Ahmedabad"]
-          }].map((item, i) => (
-            <div key={i} className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-              <div className="bg-amber-800 w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white">
+        {/* Contact Cards */}
+        <div className="mb-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {contactInfo.map((item, i) => (
+            <div
+              key={i}
+              className="group rounded-3xl border border-white/40 bg-white/70 p-8 shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-700 to-orange-500 text-white shadow-md transition-transform duration-300 group-hover:scale-110">
                 {item.icon}
               </div>
-              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-              {item.lines.map((line, idx) => (
-                <p key={idx} className="text-gray-700">{line}</p>
-              ))}
+
+              <h3 className="mb-3 text-2xl font-bold text-gray-900">
+                {item.title}
+              </h3>
+
+              <div className="space-y-1">
+                {item.lines.map((line, idx) => (
+                  <p key={idx} className="text-gray-600">
+                    {line}
+                  </p>
+                ))}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* FORM */}
-        <div className="bg-gradient-to-br from-gray-50 to-amber-50 rounded-2xl shadow-xl p-8 md:p-12">
-          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+        {/* Contact Form */}
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/30 bg-white/60 p-8 shadow-2xl backdrop-blur-xl md:p-14">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-amber-50/30" />
 
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
-              {["first_name", "last_name", "email", "company"].map((field) => (
-                <input
-                  key={field}
-                  type="text"
-                  name={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  placeholder={field.replace('_', ' ').toUpperCase()}
-                  className="input"
+          <form
+            onSubmit={handleSubmit}
+            className="relative z-10 mx-auto max-w-4xl"
+          >
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* First Name */}
+              <div className="relative">
+                <User
+                  size={20}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
                 />
-              ))}
+
+                <input
+                  type="text"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  placeholder="First Name"
+                  className={inputClass}
+                />
+              </div>
+
+              {/* Last Name */}
+              <div className="relative">
+                <User
+                  size={20}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+
+                <input
+                  type="text"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  placeholder="Last Name"
+                  className={inputClass}
+                />
+              </div>
+
+              {/* Email */}
+              <div className="relative">
+                <Mail
+                  size={20}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Email Address"
+                  className={inputClass}
+                />
+              </div>
+
+              {/* Company */}
+              <div className="relative">
+                <Building2
+                  size={20}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  placeholder="Company Name"
+                  className={inputClass}
+                />
+              </div>
             </div>
 
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              rows={5}
-              placeholder="Your message..."
-              className="w-full px-4 py-3 rounded-lg border"
-            />
+            {/* Message */}
+            <div className="relative mt-6">
+              <MessageSquare
+                size={20}
+                className="absolute left-4 top-5 text-gray-400"
+              />
 
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows={6}
+                placeholder="Write your message..."
+                className="w-full rounded-2xl border border-gray-200 bg-white/70 py-4 pl-12 pr-4 text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-300 focus:border-amber-700 focus:ring-4 focus:ring-amber-100 shadow-sm"
+              />
+            </div>
+
+            {/* Submit */}
             <button
+              type="submit"
               disabled={isSubmitting}
-              className="btn-primary w-full mt-6 flex justify-center items-center"
+              className="group mt-8 flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-700 to-orange-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isSubmitting ? "Sending..." : "Send Message"}
-              <Send className="ml-2" size={20} />
+              {isSubmitting ? (
+                <div className="flex items-center gap-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Sending Message...
+                </div>
+              ) : (
+                <>
+                  Send Message
+                  <Send
+                    size={20}
+                    className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </>
+              )}
             </button>
-
           </form>
         </div>
-
       </div>
     </section>
   );
