@@ -12,11 +12,13 @@ export default function Footer() {
   };
 
   return (
-    <footer className="footer bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 className="text-2xl font-bold mb-4 text-amber-400">
+    <footer className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-amber-500/10 blur-3xl" />
+      <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-orange-500/10 blur-3xl" />
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-4">
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md">
+            <h3 className="mb-4 text-2xl font-bold text-amber-400">
               WoodFloat Pro
             </h3>
             <p className="text-gray-300 mb-4 leading-relaxed">
@@ -55,7 +57,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md">
             <h4 className="text-lg font-semibold mb-4 text-amber-400">
               Quick Links
             </h4>
@@ -95,7 +97,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md">
             <h4 className="text-lg font-semibold mb-4 text-amber-400">
               Services
             </h4>
@@ -108,7 +110,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md">
             <h4 className="text-lg font-semibold mb-4 text-amber-400">
               Contact Info
             </h4>
@@ -136,7 +138,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 pt-8">
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               {currentYear} WoodFloat Pro. All rights reserved.
