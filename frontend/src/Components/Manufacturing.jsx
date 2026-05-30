@@ -32,24 +32,28 @@ const stats = [
 
 export default function Manufacturing() {
   return (
-    <section id="manufacturing" className="py-20 bg-gradient-to-br from-gray-50 to-amber-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+    <section id="manufacturing" className="relative overflow-hidden bg-gradient-to-b from-white via-amber-50/30 to-white py-20">
+      <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <span className="mb-4 inline-block rounded-full bg-amber-100 px-4 py-1 text-sm font-semibold text-amber-800">MANUFACTURING EXCELLENCE</span>
+          <h2 className="mb-4 text-3xl font-black text-gray-900 md:text-4xl">
             Manufacturing Excellence
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Combining traditional craftsmanship with modern manufacturing techniques to deliver superior quality wooden floats
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            Combining traditional craftsmanship with modern manufacturing techniques to deliver superior quality wooden floats.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div
+              <article
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all"
+                className="rounded-[1.75rem] border border-white/40 bg-white/70 p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
                 <div className="bg-amber-100 w-14 h-14 rounded-lg flex items-center justify-center mb-4">
                   <Icon className="text-amber-800" size={28} />
@@ -60,12 +64,12 @@ export default function Manufacturing() {
                 <p className="text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
-              </div>
+              </article>
             );
           })}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-16">
+        <div className="mb-16 rounded-[2rem] border border-white/40 bg-white/70 p-8 shadow-2xl backdrop-blur-xl md:p-12">
           <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
             Our Numbers Speak
           </h3>
@@ -128,7 +132,7 @@ export default function Manufacturing() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-amber-700 to-orange-800 rounded-2xl p-8 text-white shadow-2xl">
+          <div className="rounded-[2rem] border border-white/30 bg-gradient-to-br from-amber-700 to-orange-800 p-8 text-white shadow-2xl">
             <h3 className="text-2xl font-bold mb-6">Why Choose Us?</h3>
             <ul className="space-y-4">
               <li className="flex items-start">
