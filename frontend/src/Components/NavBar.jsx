@@ -17,8 +17,8 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="sticky bg-white shadow-md z-1">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-1 border-b border-white/40 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <span className="text-2xl font-bold text-amber-800">
@@ -83,8 +83,8 @@ export default function NavBar() {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className="border-t border-white/40 bg-white/90 backdrop-blur-xl md:hidden">
+          <div className="space-y-1 px-2 pb-3 pt-2">
             <Link to="/"
               className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-800 rounded-md transition-colors"
             >
