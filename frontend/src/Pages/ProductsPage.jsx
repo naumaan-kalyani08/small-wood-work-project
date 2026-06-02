@@ -453,10 +453,10 @@ const ProductsPage = () => {
     return (
         <div
             style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
-            className="bg-amber-50 min-h-screen overflow-x-hidden"
+            className="relative overflow-x-hidden bg-gradient-to-b from-white via-amber-50/40 to-white min-h-screen"
         >
             {/* ── HERO ─────────────────────────────── */}
-            <section className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 pt-24 pb-16 overflow-hidden">
+            <section className="relative overflow-hidden py-24">
                 {/* Decorative rings */}
                 <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full border border-amber-200 opacity-40" />
                 <div className="absolute top-10 -right-8 w-64 h-64 rounded-full border border-amber-300 opacity-20" />
@@ -466,13 +466,15 @@ const ProductsPage = () => {
                     ref={heroRef}
                     className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
                 >
+                    <div className="absolute top-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-amber-200/30 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl" />
                     <div
                         style={{
                             opacity: heroVisible ? 1 : 0,
                             transform: heroVisible ? "translateY(0)" : "translateY(30px)",
                             transition: "opacity 0.8s ease, transform 0.8s ease",
                         }}
-                        className="max-w-2xl"
+                        className="relative overflow-hidden rounded-[2rem] border border-white/40 bg-white/70 p-10 shadow-2xl backdrop-blur-xl md:p-14"
                     >
                         <span className="inline-flex items-center gap-2 text-amber-700 text-xs font-semibold tracking-widest uppercase mb-5 border border-amber-300 rounded-full px-4 py-1 bg-white/60">
                             <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
@@ -500,7 +502,7 @@ const ProductsPage = () => {
                             transform: heroVisible ? "translateY(0)" : "translateY(20px)",
                             transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
                         }}
-                        className="mt-10 flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+                        className="mt-10 rounded-[2rem] border border-white/40 bg-white/70 p-5 shadow-xl backdrop-blur-xl sm:flex sm:items-center sm:justify-between"
                     >
                         {/* Search */}
                         <div className="relative flex-shrink-0 w-full sm:w-72">
@@ -544,10 +546,11 @@ const ProductsPage = () => {
             </section>
 
             {/* ── PRODUCT GRID ─────────────────────── */}
-            <section className="py-16">
+            <section className="relative py-16">
+                <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-amber-100/30 to-transparent" />
                 <div
                     ref={gridRef}
-                    className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+                    className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
                 >
                     {/* Result count */}
                     <div
@@ -569,7 +572,7 @@ const ProductsPage = () => {
                     </div>
 
                     {filtered.length === 0 ? (
-                        <div className="text-center py-24">
+                        <div className="text-center rounded-[1.75rem] border border-white/40 bg-white/70 p-16 shadow-xl backdrop-blur-xl">
                             <Package size={48} className="text-amber-200 mx-auto mb-4" />
                             <p className="text-gray-400 text-lg">No products match your search.</p>
                             <button
@@ -596,9 +599,12 @@ const ProductsPage = () => {
             </section>
 
             {/* ── TRADE ENQUIRY BANNER ──────────────── */}
-            <section className="py-20 bg-white border-t border-amber-100">
+            <section className="relative py-20">
+                <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-amber-100/60 to-transparent" />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-gradient-to-br from-amber-800 to-amber-900 rounded-3xl p-10 md:p-14 relative overflow-hidden">
+                    <div className="relative overflow-hidden rounded-[2rem] border border-white/40 bg-white/70 p-10 md:p-14 shadow-2xl backdrop-blur-xl">
+                        <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-amber-200/30 blur-3xl" />
+                        <div className="absolute bottom-0 -left-8 w-48 h-48 rounded-full bg-orange-200/30 blur-3xl" />
                         {/* Decorative */}
                         <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full border border-amber-700 opacity-30" />
                         <div className="absolute bottom-0 -left-8 w-48 h-48 rounded-full bg-amber-700 opacity-20" />
