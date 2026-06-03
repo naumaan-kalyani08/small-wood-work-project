@@ -85,29 +85,32 @@ const AuthPage = () => {
     };
 
     return (
-        <div className='auth-page-main wrapper min-h-screen flex items-center justify-center'>
-            <div className="auth-card-wrapper perspective">
+        <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-white via-amber-50/40 to-white flex items-center justify-center py-20">
+            <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl" />
+
+            <div className="relative z-10 auth-card-wrapper perspective max-w-md w-full px-6">
                 <div className={`flip-card ${view}`}>
-                    <div className="card card-front bg-white p-4 rounded-lg shadow-lg">
+                    <div className="card card-front rounded-[1.75rem] border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-md">
                         <h2 className='text-2xl font-bold mb-4'>Login</h2>
                         <ReusableInputField value={AuthForm.email} onchange={handleInputChange} label="Email" placeholder="Enter your email" name="email" />
                         <ReusableInputField value={AuthForm.password} onchange={handleInputChange} label="Password" placeholder="Enter your password" type="password" name="password" />
 
-                        <p className="cursor-pointer text-orange-800 font-medium underline py-1" onClick={() => flipCard('forgot')}>Reset Password</p>
-                        <button className="w-full px-4 py-1 shadow-md rounded border text-orange-800 font-semibold border-orange-800 cursor-pointer mb-2" onClick={() => flipCard('signup')}>Sign Up</button>
-                        <button className="w-full px-4 py-1.5 shadow-md rounded bg-orange-800 text-white cursor-pointer" onClick={AuthUser} disabled={isLoading}>
+                        <p className="cursor-pointer text-amber-800 font-medium underline py-1" onClick={() => flipCard('forgot')}>Reset Password</p>
+                        <button className="w-full px-4 py-2 rounded-2xl border border-amber-700 text-amber-800 font-semibold mb-3" onClick={() => flipCard('signup')}>Sign Up</button>
+                        <button className="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-700 to-orange-500 text-white font-semibold shadow-lg" onClick={AuthUser} disabled={isLoading}>
                             {isLoading ? 'Processing...' : 'Login'}
                         </button>
                     </div>
 
-                    <div className="card card-right bg-white p-4 rounded-lg shadow-lg">
+                    <div className="card card-right rounded-[1.75rem] border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-md">
                         <h2 className='text-2xl font-bold mb-4'>Create an Account</h2>
                         <p className='text-sm text-gray-600 mb-4'>Sign up to manage your account and view secure submissions.</p>
-                        <button className="w-full px-4 py-1 shadow-md rounded bg-orange-800 text-white cursor-pointer" onClick={() => flipCard('signup')}>Start Sign Up</button>
-                        <button className="w-full px-4 py-1 shadow-md rounded border border-orange-800 text-orange-800 mt-3" onClick={() => flipCard('login')}>Back to Login</button>
+                        <button className="w-full px-4 py-2 rounded-2xl bg-gradient-to-r from-amber-700 to-orange-500 text-white font-semibold mb-3" onClick={() => flipCard('signup')}>Start Sign Up</button>
+                        <button className="w-full px-4 py-2 rounded-2xl border border-amber-700 text-amber-800" onClick={() => flipCard('login')}>Back to Login</button>
                     </div>
 
-                    <div className="card card-left bg-white p-4 rounded-lg shadow-lg">
+                    <div className="card card-left rounded-[1.75rem] border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-md">
                         {view === 'signup' ?
                             <>
                                 <h2 className='text-2xl font-bold mb-4'>Sign Up</h2>
@@ -121,9 +124,9 @@ const AuthPage = () => {
                             </>
                             : <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
                         }
-                        <button className="w-full px-4 py-1 shadow-md rounded border text-orange-800 font-semibold border-orange-800 cursor-pointer mb-2" onClick={() => flipCard('login')}>Back</button>
+                        <button className="w-full px-4 py-2 rounded-2xl border border-amber-700 text-amber-800 font-semibold mb-3" onClick={() => flipCard('login')}>Back</button>
                         {view === 'signup' && (
-                            <button className="w-full px-4 py-1.5 shadow-md rounded bg-orange-800 text-white cursor-pointer" onClick={registerUser} disabled={isLoading}>
+                            <button className="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-700 to-orange-500 text-white font-semibold" onClick={registerUser} disabled={isLoading}>
                                 {isLoading ? 'Processing...' : 'Register'}
                             </button>
                         )}
