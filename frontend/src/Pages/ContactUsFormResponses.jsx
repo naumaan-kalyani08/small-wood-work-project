@@ -60,14 +60,19 @@ const ContactUsFormResponses = () => {
         fetchFormData()
     }, [token, authHeaders])
 
-    if (loading) return <div className='bg-white my-2 p-4 rounded-lg shadow-md container mx-auto'><Skeleton active paragraph={{ rows: 6 }} /></div>
-    if (error) return <div className='bg-red-100 my-2 p-4 rounded-lg shadow-md container mx-auto text-red-700'>Error: {error}</div>
+    if (loading) return <div className='relative overflow-hidden min-h-screen bg-gradient-to-b from-white via-amber-50/40 to-white py-12'><div className='absolute top-0 left-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl' /><div className='absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl' /><div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-[2rem] border border-white/40 bg-white/70 p-8 shadow-2xl backdrop-blur-xl'><Skeleton active paragraph={{ rows: 6 }} /></div></div>
+    if (error) return <div className='relative overflow-hidden min-h-screen bg-gradient-to-b from-white via-amber-50/40 to-white py-12'><div className='absolute top-0 left-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl' /><div className='absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl' /><div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-[2rem] border border-white/40 bg-white/70 p-8 shadow-2xl backdrop-blur-xl text-red-600'><p className='text-lg font-semibold'>Error: {error}</p></div></div>
 
     return (
-        <div className='bg-white min-height-screen my-2 p-4 rounded-lg shadow-md container mx-auto'>
-            <h1>Contact Form Responses</h1>
-
-            <ReusableTableStructure dataSource={FormData.length > 0 ? FormData : DummyData} columns={ContactUscolumns} rowKey="key" />
+        <div className='relative overflow-hidden min-h-screen bg-gradient-to-b from-white via-amber-50/40 to-white py-12'>
+            <div className='absolute top-0 left-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl' />
+            <div className='absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl' />
+            <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+                <div className='rounded-[2rem] border border-white/40 bg-white/70 p-8 shadow-2xl backdrop-blur-xl'>
+                    <h1 className='text-3xl font-black text-gray-900 mb-6'>Contact Form Responses</h1>
+                    <ReusableTableStructure dataSource={FormData.length > 0 ? FormData : DummyData} columns={ContactUscolumns} rowKey="key" />
+                </div>
+            </div>
         </div>
     )
 }
