@@ -33,7 +33,7 @@ export default function Products() {
       <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
       <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-1 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <span className="mb-4 inline-block rounded-full bg-amber-100 px-4 py-1 text-sm font-semibold text-amber-800">OUR PRODUCT RANGE</span>
           <h2 className="mb-4 text-3xl font-black text-gray-900 md:text-4xl">
