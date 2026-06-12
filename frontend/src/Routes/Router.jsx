@@ -1,5 +1,5 @@
 
-import { Route, Routes, useLocation, Navigate } from 'react-router'
+import { Route, Routes, useLocation, Navigate } from 'react-router-dom'
 import CommonStrucutre from '../CommonLayouts/CommonStrucutre'
 import LandingPage from '../Pages/LandingPage'
 import ProductsPage from '../Pages/ProductsPage'
