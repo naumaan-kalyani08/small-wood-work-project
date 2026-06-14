@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import Transition from '../Components/Transition';
 import { ReusableInputField } from '../Components/ReusableComponents';
